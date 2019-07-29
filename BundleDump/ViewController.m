@@ -36,8 +36,11 @@
     for (id appliction in allApplications) {
         SEL selectorApplicationIdentifier = NSSelectorFromString(@"applicationIdentifier");
         NSString *applicationIdentifier = (NSString *)[appliction performSelector:selectorApplicationIdentifier];
+        SEL selectorItemName = NSSelectorFromString(@"localizedName");
+        NSString *applicationItemName = (NSString *)[appliction performSelector:selectorItemName];
+        
+        NSLog(@"%@ - %@", applicationItemName, applicationIdentifier);
         [identifiers addObject:applicationIdentifier];
-        NSLog(@"%@", applicationIdentifier);
     }
     return identifiers;
 }
