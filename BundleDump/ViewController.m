@@ -16,8 +16,32 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    self.view.backgroundColor = [UIColor whiteColor];
+    [self _applicationIdentifiers];
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+
+- (NSArray<NSString*>*)_applicationIdentifiers {
+    NSMutableArray<NSString*>* identifiers = [NSMutableArray<NSString*> new];
+    
+    Class LSApplicationWorkspace = NSClassFromString(@"LSApplicationWorkspace");
+    id defaultApplicationWorkspace = [LSApplicationWorkspace valueForKey:@"defaultWorkspace"];
+    SEL selectorAllApplications = NSSelectorFromString(@"allApplications");
+    
+    id allApplications = [defaultApplicationWorkspace performSelector:selectorAllApplications];
+    
+    for (id appliction in allApplications) {
+        SEL selectorApplicationIdentifier = NSSelectorFromString(@"applicationIdentifier");
+        NSString *applicationIdentifier = (NSString *)[appliction performSelector:selectorApplicationIdentifier];
+        [identifiers addObject:applicationIdentifier];
+        NSLog(@"%@", applicationIdentifier);
+    }
+    return identifiers;
+}
+
+#pragma clang diagnostic pop
 
 @end
